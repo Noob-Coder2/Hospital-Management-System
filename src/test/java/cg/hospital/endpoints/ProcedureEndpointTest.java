@@ -17,7 +17,7 @@ public class ProcedureEndpointTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // ✅ TEST 1 — GET /api/procedures → 200 OK + _embedded.procedures array
+    // TEST 1 — GET /api/procedures → 200 OK + _embedded.procedures array
     // Spring Data REST wraps lists in HAL format: { "_embedded": { "procedures": [...] } }
     @Test
     void testGetAllProcedures() throws Exception {
@@ -26,7 +26,7 @@ public class ProcedureEndpointTest {
                 .andExpect(jsonPath("$._embedded.procedures").isArray());
     }
 
-    // ✅ TEST 2 — GET /api/procedures/1 → 200 OK + name and cost fields present
+    // TEST 2 — GET /api/procedures/1 → 200 OK + name and cost fields present
     // Code 1 = Reverse Rhinopodoplasty (exists in seed data)
     @Test
     void testGetProcedureById_found() throws Exception {
@@ -36,7 +36,7 @@ public class ProcedureEndpointTest {
                 .andExpect(jsonPath("$.cost").exists()); // cost field is in the response
     }
 
-    // ✅ TEST 3 — GET /api/procedures/99999 → 404 Not Found
+    // TEST 3 — GET /api/procedures/99999 → 404 Not Found
     // Spring Data REST returns 404 automatically when ID is not in DB
     @Test
     void testGetProcedureById_notFound() throws Exception {
@@ -44,7 +44,7 @@ public class ProcedureEndpointTest {
                 .andExpect(status().isNotFound());
     }
 
-    // ✅ TEST 4 — POST then GET to verify the record was actually saved
+    // TEST 4 — POST then GET to verify the record was actually saved
     // WHY TWO STEPS: Spring Data REST POST returns 201 with EMPTY body.
     //               We cannot assert $.name on the POST response — body is null.
     //               Solution: POST to save → GET the same ID → assert the data there.
@@ -65,7 +65,7 @@ public class ProcedureEndpointTest {
                 .andExpect(jsonPath("$.cost").value(750.0));
     }
 
-    // ✅ TEST 5 — POST to create, PUT to update, GET to verify the update was saved
+    // TEST 5 — POST to create, PUT to update, GET to verify the update was saved
     // WHY THREE STEPS: Spring Data REST PUT returns 204 NO CONTENT (empty body).
     //                  We cannot assert $.cost on the PUT response — body is null.
     //                  Solution: POST → PUT → GET and assert the new cost value.
