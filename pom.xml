@@ -6,8 +6,18 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
+<<<<<<< HEAD
 		<version>3.5.14</version>
 		<relativePath/> <!-- lookup parent from repository -->
+=======
+<<<<<<< Updated upstream
+		<version>3.3.5</version>
+		<relativePath /> <!-- lookup parent from repository -->
+=======
+		<version>3.5.14</version>
+		<relativePath/> <!-- lookup parent from repository -->
+>>>>>>> Stashed changes
+>>>>>>> cfbfe4c (Resolved conflict - accepted master version)
 	</parent>
 	<groupId>cg</groupId>
 	<artifactId>hospital</artifactId>
@@ -46,6 +56,7 @@
 			<artifactId>spring-boot-starter-hateoas</artifactId>
 		</dependency>
 		<dependency>
+<<<<<<< HEAD
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -58,6 +69,12 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-rest-hal-explorer</artifactId>
 		</dependency>
+=======
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-test</artifactId>
+    <scope>test</scope>
+</dependency>
+>>>>>>> cfbfe4c (Resolved conflict - accepted master version)
 
 		
 		<dependency>

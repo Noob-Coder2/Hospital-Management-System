@@ -22,11 +22,19 @@ public class Physician {
     @Column(name = "SSN", nullable = false)
     private Integer ssn;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cfbfe4c (Resolved conflict - accepted master version)
     public Integer getEmployeeId() { return employeeId; }
     public String getName() { return name; }
     public String getPosition() { return position; }
     public Integer getSsn() { return ssn; }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cfbfe4c (Resolved conflict - accepted master version)
     public void setEmployeeId(Integer employeeId) { 
         this.employeeId = employeeId; 
     }
