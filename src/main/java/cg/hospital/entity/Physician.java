@@ -7,9 +7,12 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "Physician")
+
 public class Physician {
 
     @Id
+   
+    
     @Column(name = "EmployeeID")
     private Integer employeeId;
 

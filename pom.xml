@@ -56,7 +56,11 @@
 			<artifactId>spring-data-rest-hal-explorer</artifactId>
 		</dependency>
 
+<<<<<<< HEAD
 		<!-- DB -->
+=======
+		
+>>>>>>> 7f2b988 (Member 2: Physician entity and repository)
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
