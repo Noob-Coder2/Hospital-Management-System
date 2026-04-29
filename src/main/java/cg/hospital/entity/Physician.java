@@ -22,12 +22,10 @@ public class Physician {
     @Column(name = "SSN", nullable = false)
     private Integer ssn;
 
-
     public Integer getEmployeeId() { return employeeId; }
     public String getName() { return name; }
     public String getPosition() { return position; }
     public Integer getSsn() { return ssn; }
-
 
     public void setEmployeeId(Integer employeeId) { 
         this.employeeId = employeeId; 
