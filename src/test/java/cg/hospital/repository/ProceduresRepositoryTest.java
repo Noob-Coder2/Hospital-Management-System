@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class ProceduresRepositoryTest {
-
+ 
     @Autowired
     private ProceduresRepository proceduresRepository;
 
