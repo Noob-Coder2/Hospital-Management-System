@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,15 +26,16 @@ public class PhysicianRepositoryTest {
     public void testFindAll() {
         List<Physician> list = physicianRepository.findAll();
         assertThat(list).isNotEmpty();
-        assertThat(list.size())
-            .isGreaterThanOrEqualTo(9);
+        assertThat(list.size()).isEqualTo(9);
     }
 
     @Test
     public void testFindByName() {
         List<Physician> list =
-            physicianRepository.findByName("John Dorian Updated");
+            physicianRepository.findByName("John Dorian");
         assertThat(list).isNotEmpty();
+        assertThat(list.get(0).getName())
+            .isEqualTo("John Dorian");
     }
 
     @Test
@@ -60,25 +60,23 @@ public class PhysicianRepositoryTest {
         List<Physician> list =
             physicianRepository
             .findByPosition("Surgical Attending Physician");
-        assertThat(list.size())
-            .isGreaterThanOrEqualTo(3);
+        assertThat(list.size()).isEqualTo(3);
     }
 
     @Test
-    @Transactional
     public void testCreate() {
         Physician p = new Physician();
-        p.setEmployeeId(101);
+        p.setEmployeeId(100);
         p.setName("Test Doctor");
         p.setPosition("Test Position");
-        p.setSsn(999999998);
+        p.setSsn(999999999);
         Physician saved = physicianRepository.save(p);
-        assertThat(saved.getEmployeeId()).isEqualTo(101);
-        physicianRepository.deleteById(101);
+        assertThat(saved.getEmployeeId()).isEqualTo(100);
+        // cleanup
+        physicianRepository.deleteById(100);
     }
 
     @Test
-    @Transactional
     public void testUpdate() {
         Physician p = physicianRepository
             .findById(1).orElse(null);
@@ -90,6 +88,7 @@ public class PhysicianRepositoryTest {
             .findById(1).orElse(null);
         assertThat(updated.getName())
             .isEqualTo("Test Doctor");
+        // restore original
         updated.setName(original);
         physicianRepository.save(updated);
     }
@@ -114,6 +113,8 @@ public class PhysicianRepositoryTest {
         Physician p = physicianRepository
             .findById(1).orElse(null);
         assertThat(p).isNotNull();
+        assertThat(p.getName())
+            .isEqualTo("John Dorian");
         assertThat(p.getPosition())
             .isEqualTo("Staff Internist");
         assertThat(p.getSsn()).isEqualTo(111111111);
@@ -144,7 +145,6 @@ public class PhysicianRepositoryTest {
     public void testTrainedInCertDate() {
         List<TrainedIn> list =
             trainedInRepository.findByIdPhysician(3);
-        assertThat(list).isNotEmpty();
         assertThat(list.get(0)
             .getCertificationDate()).isNotNull();
     }
