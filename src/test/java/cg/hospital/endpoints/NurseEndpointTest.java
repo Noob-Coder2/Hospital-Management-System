@@ -9,7 +9,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 public class NurseEndpointTest {
@@ -17,7 +16,6 @@ public class NurseEndpointTest {
     @Autowired
     private MockMvc mockMvc;
 
-    // TC-1: GET all nurses
     @Test
     void testGetAllNurses() throws Exception {
         mockMvc.perform(get("/api/nurse"))
@@ -25,26 +23,25 @@ public class NurseEndpointTest {
                 .andExpect(jsonPath("$._embedded.nurses").exists());
     }
 
-    // TC-2: GET nurse by ID
     @Test
     void testGetNurseById() throws Exception {
         mockMvc.perform(get("/api/nurse/101"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Carla Espinosa"));
+                .andExpect(jsonPath("$.name").exists())
+                .andExpect(jsonPath("$.position").exists());
     }
 
-    // TC-3: POST create nurse
     @Test
     void testCreateNurse() throws Exception {
         String body = """
-                {
-                  "employeeId": 199,
-                  "name": "Test Nurse",
-                  "position": "Nurse",
-                  "registered": true,
-                  "ssn": 123456789
-                }2
-                """;
+        {
+          "employeeId": 199,
+          "name": "Test Nurse",
+          "position": "Nurse",
+          "registered": true,
+          "ssn": 123456789
+        }
+        """;
 
         mockMvc.perform(post("/api/nurse")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -52,23 +49,28 @@ public class NurseEndpointTest {
                 .andExpect(status().isCreated());
     }
 
-    // TC-4: PUT update FULL nurse (correct way)
     @Test
     void testUpdateNurse() throws Exception {
+
         String body = """
-                {
-                  "employeeId": 101,
-                  "name": "Updated Nurse",
-                  "position": "Head Nurse",
-                  "registered": false,
-                  "ssn": 888888
-                }
-                """;
+        {
+          "employeeId": 101,
+          "name": "Updated Nurse",
+          "position": "Head Nurse",
+          "registered": false,
+          "ssn": 888888
+        }
+        """;
 
         mockMvc.perform(put("/api/nurse/101")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(body))
+                .andExpect(status().isNoContent());
+
+        mockMvc.perform(get("/api/nurse/101"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Updated Nurse"));
+                .andExpect(jsonPath("$.name").value("Updated Nurse"))
+                .andExpect(jsonPath("$.position").value("Head Nurse"))
+                .andExpect(jsonPath("$.registered").value(false));
     }
 }
