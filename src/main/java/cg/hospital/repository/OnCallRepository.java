@@ -13,5 +13,5 @@ public interface OnCallRepository extends JpaRepository<OnCall, OnCallId> {
 
     // GET /api/on_call/search/findByNurse?nurse=101
     // This is what Page 2 uses to fetch all on-call records for a specific nurse
-    List<OnCall> findByNurse_EmployeeID(Integer employeeID);
+    List<OnCall> findByNurse_EmployeeId(Integer employeeId);
 }
