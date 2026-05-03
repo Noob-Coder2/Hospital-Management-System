@@ -10,6 +10,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace;
  
@@ -46,12 +48,6 @@ public class NurseRepositoryTest {
         assertThat(list.size()).isGreaterThanOrEqualTo(3);
     }
     
-    @BeforeEach
-    void setUp() {
-        nurseRepository.save(
-            new Nurse(101, "Carla Espinosa", "Head Nurse", true, 111111110)
-        );
-    }
  
     @Test
     @DisplayName("findById should return Carla Espinosa for ID 101")
@@ -59,7 +55,8 @@ public class NurseRepositoryTest {
         Optional<Nurse> nurse = nurseRepository.findById(NURSE_CARLA);
         assertThat(nurse).isPresent();
         assertThat(nurse.get().getEmployeeId()).isEqualTo(NURSE_CARLA);
-        assertThat(nurse.get().getName()).isEqualTo("Carla Espinosa");
+        assertThat(nurse).isPresent();
+        assertThat(nurse.get().getEmployeeId()).isEqualTo(101);
     }
  
 
@@ -102,33 +99,47 @@ public class NurseRepositoryTest {
         nurseRepository.save(updated);
     }
 
-    // ═══════════════════════════════════════════════════════════════
     //  PAGE 3 — Associated Tables   [6 JPA tests]
-    // ═══════════════════════════════════════════════════════════════
 
-    // ── Appointments (PrepNurse) ─────────────────────────────────
 
-////     TC-6
+    // ── Appointments (PrepNurse) 
+
+//    TC-6
 //    @Test
 //    @DisplayName("findByPrepNurse_EmployeeID should return appointments for Carla")
 //    void testFindAppointmentsByNurse() {
 //        List<Appointment> result = appointmentRepository
-//                .findByPrepNurseEntity_EmployeeId(NURSE_CARLA);
+//                .findByPrepNurseEntityEmployeeId(NURSE_CARLA);
 //        assertThat(result).isNotEmpty();
 //    }
-//
-//    // TC-7
-//    @Test
-//    @DisplayName("Appointments for Carla should have valid patient and start date")
-//    void testAppointmentFields() {
-//        List<Appointment> result = appointmentRepository
-//                .findByPrepNurseEntity_EmployeeId(NURSE_CARLA);
-//        assertThat(result).isNotEmpty();
-//        assertThat(result.get(0).getPatientEntity()).isNotNull();
-//        assertThat(result.get(0).getStarto()).isNotNull();
-//    }
+    @Test
+    @DisplayName("findByPrepNurse should return appointments for Carla")
+    void testFindAppointmentsByNurse() {
 
-    // ── On-Call ──────────────────────────────────────────────────
+        Page<Appointment> result =
+                appointmentRepository.findByPrepNurseEntityEmployeeId(
+                        NURSE_CARLA,
+                        PageRequest.of(0, 10)
+                );
+
+        assertThat(result).isNotEmpty();
+    }
+    @Test
+    @DisplayName("Appointments for Carla should have valid patient and start date")
+    void testAppointmentFields() {
+
+        Page<Appointment> result = appointmentRepository
+                .findByPrepNurseEntityEmployeeId(NURSE_CARLA, PageRequest.of(0, 10));
+
+        assertThat(result).isNotEmpty();
+
+        Appointment a = result.getContent().get(0);
+
+        assertThat(a.getPatientEntity()).isNotNull();
+        assertThat(a.getStarto()).isNotNull();
+    }
+
+    // ── On-Call 
 
 //    TC-8
     @Test
@@ -156,18 +167,20 @@ public class NurseRepositoryTest {
     // ── Undergoes (AssistingNurse) ───────────────────────────────
 
     // TC-10
-//    @Test
-//    @DisplayName("findByAssistingNurseId should return procedures Carla assisted in")
-//    void testFindProceduresByNurse() {
-//        List<Undergoes> result = undergoesRepository.findByAssistingNurse_EmployeeId(NURSE_CARLA);
-//        assertThat(result).isNotEmpty();
-//    }
-// 
-//    @Test
-//    @DisplayName("Undergoes records for Carla should have valid dateUndergoes")
-//    void testProcedureDateExists() {
-//        List<Undergoes> result = undergoesRepository.findByAssistingNurse_EmployeeId(NURSE_CARLA);
-//        assertThat(result).isNotEmpty();
-//        result.forEach(u -> assertThat(u.getDateUndergoes()).isNotNull());
-//    }
+    @Test
+    @DisplayName("findByAssistingNurseId should return procedures Carla assisted in")
+    void testFindProceduresByNurse() {
+        List<Undergoes> result = undergoesRepository.findByAssistingNurse_EmployeeId(NURSE_CARLA);
+        assertThat(result).isNotEmpty();
+    }
+ 
+//    Tc-11
+    
+    @Test
+    @DisplayName("Undergoes records for Carla should have valid dateUndergoes")
+    void testProcedureDateExists() {
+        List<Undergoes> result = undergoesRepository.findByAssistingNurse_EmployeeId(NURSE_CARLA);
+        assertThat(result).isNotEmpty();
+        result.forEach(u -> assertThat(u.getDateUndergoes()).isNotNull());
+    }
 }

@@ -19,15 +19,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class NurseEndpointTest {
-	
-
 
     @Autowired
     private MockMvc mockMvc;
 
-    // ═══════════════════════════════════════════════════════════════
+    
     //  PAGE 2 — Nurse Master Endpoints
-    // ═══════════════════════════════════════════════════════════════
 
     @Test
     void shouldReturnAllNurses_whenNursesExist() throws Exception {
@@ -113,6 +110,7 @@ public class NurseEndpointTest {
     }
 
 //    uncertain test cases failing rn lets see what to do in future
+    
 //    @Test
 //    void shouldUpdateRegistered_whenValidNurseId() throws Exception {
 //        mockMvc.perform(put("/api/nurse/registered/103")
@@ -123,7 +121,7 @@ public class NurseEndpointTest {
 //    }
 //
 //    @Test
-//    void shouldUpdateSSN_whenValidNurseId() throws Exception {
+//    void shouldUpdateSSN_whenValidNurseId() throws Exception {       
 //        mockMvc.perform(put("/api/nurse/ssn/101")
 //                .contentType(MediaType.APPLICATION_JSON)
 //                .content("999999"))
@@ -131,11 +129,10 @@ public class NurseEndpointTest {
 //                .andExpect(jsonPath("$.ssn").value(999999));
 //    }
 
-    // ═══════════════════════════════════════════════════════════════
-    //  PAGE 3 — Associated Data Endpoints
-    // ═══════════════════════════════════════════════════════════════
 
-    // ── On-Call ───────────────────────────────────────────────────
+    //  PAGE 3 — Associated Data Endpoints
+
+    // ── On-Call 
 
     @Test
     void shouldReturnOnCallSchedule_whenNurseExists() throws Exception {
@@ -157,31 +154,31 @@ public class NurseEndpointTest {
     // ── Undergoes (AssistingNurse) ────────────────────────────────
     // uses findByAssistingNurseId — matches plain Integer field in entity
 
-//    @Test
-//    void shouldReturnProcedures_whenNurseAssisted() throws Exception {
-//        mockMvc.perform(get("/api/undergoes/search/findByAssistingNurse_EmployeeId")
-//                .param("employeeId", "101"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$._embedded.undergoes").exists());
-//    }
-//
-//    @Test
-//    void shouldReturnEmptyProcedures_whenNurseHasNone() throws Exception {
-//        mockMvc.perform(get("/api/undergoes/search/findByAssistingNurse_EmployeeId")
-//                .param("assistingNurseId", "999999"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$._embedded.undergoes").doesNotExist());
-//    }
+    @Test
+    void shouldReturnProcedures_whenNurseAssisted() throws Exception {
+        mockMvc.perform(get("/api/undergoes/search/findByAssistingNurse_EmployeeId")
+                .param("employeeId", "101"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.undergoes").exists());
+    }
+    
+    @Test
+    void shouldReturnEmptyProcedures_whenNurseHasNone() throws Exception {
+        mockMvc.perform(get("/api/undergoes/search/findByAssistingNurse_EmployeeId")
+                .param("employeeId", "999999"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.undergoes").isEmpty());
+    }
 
     // ── Appointments — via teammate's AppointmentRepository ───────
     // Teammate's repo has no findByPrepNurse method yet.
     // Testing via the existing findByPatientEntitySsn as a proxy
     // to confirm appointments endpoint is reachable.
 
-//    @Test
-//    void shouldReturnAppointments_whenEndpointReachable() throws Exception {
-//        mockMvc.perform(get("/api/appointments"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$._embedded.appointments").exists());
-//    }
+    @Test
+    void shouldReturnAppointments_whenEndpointReachable() throws Exception {
+        mockMvc.perform(get("/api/appointments"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.appointments").exists());
+    }
 }
