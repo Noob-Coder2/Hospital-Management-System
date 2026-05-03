@@ -137,22 +137,22 @@ public class NurseEndpointTest {
 
     // ── On-Call ───────────────────────────────────────────────────
 
-//    @Test
-//    void shouldReturnOnCallSchedule_whenNurseExists() throws Exception {
-//        mockMvc.perform(get("/api/on_call/search/findByNurse_EmployeeId")
-//                .param("employeeID", "101"))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$._embedded.onCalls").exists());
-//    }
-//
-//    @Test
-//    void shouldReturnEmptyOnCall_whenNurseHasNone() throws Exception {
-//        mockMvc.perform(get("/api/on_call/search/findByNurse_EmployeeId")
-//                .param("employeeID", "999999"))
-//                .andExpect(status().isOk())
-////                .andExpect(jsonPath("$._embedded.onCalls").doesNotExist());
-//        		.andExpect(status().isOk());
-//    }
+    @Test
+    void shouldReturnOnCallSchedule_whenNurseExists() throws Exception {
+        mockMvc.perform(get("/api/on_call/search/findByNurse_EmployeeId")
+                .param("employeeID", "101"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$._embedded.onCalls").exists());
+    }
+
+    @Test
+    void shouldReturnEmptyOnCall_whenNurseHasNone() throws Exception {
+        mockMvc.perform(get("/api/on_call/search/findByNurse_EmployeeId")
+                .param("employeeID", "999999"))
+                .andExpect(status().isOk())
+//                .andExpect(jsonPath("$._embedded.onCalls").doesNotExist());
+        		.andExpect(status().isOk());
+    }
 
     // ── Undergoes (AssistingNurse) ────────────────────────────────
     // uses findByAssistingNurseId — matches plain Integer field in entity
