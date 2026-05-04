@@ -43,6 +43,19 @@ public class GlobalExceptionHandler {
 		return build(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage(), request);
 	}
 
+	// ── 400: illegal argument (e.g. composite id format wrong like "got: 2") ─
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
+		return build(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage(), request);
+	}
+
+	// ── 500: JPA/Hibernate entity not found during lazy load ─────────────────
+	@ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
+	public ResponseEntity<Map<String, Object>> handleEntityNotFound(jakarta.persistence.EntityNotFoundException ex,
+			WebRequest request) {
+		return build(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage(), request);
+	}
+
 	// ── 400: wrong type in path/query param (e.g. "abc" where int expected) ──
 	@ExceptionHandler(MethodArgumentTypeMismatchException.class)
 	public ResponseEntity<Map<String, Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex,
