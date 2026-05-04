@@ -1,18 +1,18 @@
 package cg.hospital.exception;
 
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
-import java.util.NoSuchElementException;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
+
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -44,10 +44,10 @@ public class GlobalExceptionHandler {
 	}
 
 	// ── 400: illegal argument (e.g. composite id format wrong like "got: 2") ─
-//	@ExceptionHandler(IllegalArgumentException.class)
-//	public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
-//		return build(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage(), request);
-//	}
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
+		return build(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage(), request);
+	}
 
 	// ── 500: JPA/Hibernate entity not found during lazy load ─────────────────
 	@ExceptionHandler(jakarta.persistence.EntityNotFoundException.class)
@@ -88,12 +88,6 @@ public class GlobalExceptionHandler {
 		String msg = "Invalid value provided. Expected a valid numeric ID.";
 
 		return build(HttpStatus.BAD_REQUEST, "Bad Request", msg, request);
-	}
-
-	// ── 400: illegal argument (e.g. composite id wrong format) ───────────────
-	@ExceptionHandler(IllegalArgumentException.class)
-	public ResponseEntity<Map<String, Object>> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
-		return build(HttpStatus.BAD_REQUEST, "Bad Request", ex.getMessage(), request);
 	}
 
 	@ExceptionHandler(org.springframework.beans.TypeMismatchException.class)
